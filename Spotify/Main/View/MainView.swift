@@ -28,7 +28,7 @@ struct MainView: View {
                         case .search:
                             Text("Search")
                         case .home:
-                            Text("Home")
+                            Text(Localizable.home)
                         }
                     }
                 }
@@ -42,7 +42,7 @@ struct MainView: View {
                         Tab(
                             value: TabSection.home
                         ) {
-                            Text("Home")
+                            Text(Localizable.home)
                         } label: {
                             VStack {
                                 (
@@ -52,7 +52,7 @@ struct MainView: View {
                                 )
                                 .renderingMode(.template)
                                 
-                                Text("Home")
+                                Text(Localizable.home)
                             }
                         }
                         
@@ -72,7 +72,7 @@ struct MainView: View {
                         Tab(
                             value: TabSection.library
                         ) {
-                            Text("Library")
+                            Text(Localizable.library)
                                 .toolbar {
                                     ToolbarItem(placement: .topBarTrailing) {
                                         Button(
@@ -100,7 +100,7 @@ struct MainView: View {
                                                         .frame(height: 35)
                                                         .clipShape(Circle())
                                                     
-                                                    Text("Your Library")
+                                                    Text(Localizable.yourLibrary)
                                                         .font(.avenirNextDemi(size: 24))
                                                         .padding(.horizontal, 4)
                                                 }
@@ -113,7 +113,7 @@ struct MainView: View {
                                 Image.Icons.library
                                     .renderingMode(.template)
                                 
-                                Text("Library")
+                                Text(Localizable.library)
                             }
                         }
                     }
@@ -131,7 +131,7 @@ struct MainView: View {
                     case .search:
                         Text("Search")
                     case .home:
-                        Text("Home")
+                        Text(Localizable.home)
                     }
                 }
             }

@@ -6,14 +6,12 @@
 //
 
 import Foundation
+import SwiftUI
 
 final class LibraryViewModel: ObservableObject {
     @Published var currentContentType: ContentType = .noOption
     @Published var currentListType: ListType = .list
-    
-    func selectContentType(_ listType: ContentType) {
-        currentContentType = currentContentType == listType ? .noOption : listType
-    }
+    @Published var contentTypes: [ContentType] = [.playlists]
     
     func changeListType() {
         currentListType = currentListType == .list ? .grid : .list
@@ -25,5 +23,14 @@ final class LibraryViewModel: ObservableObject {
         let totalSpace = width + spacing
         
         return max(1, Int(totalSpace / (itemWidth + spacing)))
+    }
+    
+    func currentListTypeIcon() -> Image {
+        switch currentListType {
+        case .grid:
+            return Image.Icons.list
+        case .list:
+            return Image.Icons.grid
+        }
     }
 }

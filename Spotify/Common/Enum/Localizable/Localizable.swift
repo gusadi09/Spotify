@@ -11,4 +11,9 @@ enum Localizable {
     enum Network {
         static let networkError = String(localized: "network_error")
     }
+    
+    static let home = String(localized: "Home")
+    static let library = String(localized: "Library")
+    static let search = String(localized: "Search")
+    static let yourLibrary = String(localized: "Your Library")
 }

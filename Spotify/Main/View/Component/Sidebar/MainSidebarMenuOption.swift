@@ -45,11 +45,11 @@ struct MainSidebarMenuOption: View {
                     Group {
                         switch section {
                         case .library:
-                            Text("Library")
+                            Text(Localizable.library)
                         case .search:
-                            Text("Search")
+                            Text(Localizable.search)
                         case .home:
-                            Text("Home")
+                            Text(Localizable.home)
                         }
                     }
                         .font(
@@ -101,11 +101,11 @@ struct MainSidebarMenuOption: View {
                     Group {
                         switch section {
                         case .library:
-                            Text("Library")
+                            Text(Localizable.library)
                         case .search:
-                            Text("Search")
+                            Text(Localizable.search)
                         case .home:
-                            Text("Home")
+                            Text(Localizable.home)
                         }
                     }
                         .font(
