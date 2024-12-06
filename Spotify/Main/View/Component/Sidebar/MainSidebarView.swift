@@ -19,6 +19,7 @@ struct MainSidebarView: View {
     }
     
     var body: some View {
+        #if os(iOS)
         ScrollView {
             MainSidebarMenuOption(selectedSection: $selectedSection, section: .home)
             .padding(.top)
@@ -33,6 +34,23 @@ struct MainSidebarView: View {
                 MainSidebarHeadeView(name: headerName, action: headerAction)
             }
         }
+        #elseif os(macOS)
+        VStack(alignment: .leading) {
+            MainSidebarHeadeView(name: headerName, action: headerAction)
+                .padding(.horizontal)
+            
+            ScrollView {
+                MainSidebarMenuOption(selectedSection: $selectedSection, section: .home)
+                    .padding(.top)
+                
+                MainSidebarMenuOption(selectedSection: $selectedSection, section: .search)
+                
+                MainSidebarMenuOption(selectedSection: $selectedSection, section: .library)
+            }
+            .padding()
+        }
+        .buttonStyle(.plain)
+        #endif
     }
 }
 

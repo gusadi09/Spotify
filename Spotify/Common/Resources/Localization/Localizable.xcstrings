@@ -2,6 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "Details" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -21,10 +22,10 @@
         }
       }
     },
-    "iOS" : {
+    "Library" : {
 
     },
-    "Library" : {
+    "My First Playlist" : {
 
     },
     "network_error" : {
@@ -37,6 +38,9 @@
           }
         }
       }
+    },
+    "Playlist • 10 songs" : {
+
     },
     "Search" : {
 

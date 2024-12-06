@@ -11,6 +11,7 @@ extension Image {
     enum Icons {
         static let search = Image(.searchIcon)
         static let grid = Image(.gridIcon)
+        static let list = Image(.listIcon)
         static let home = Image(.homeIcon)
         static let homeFill = Image(.homeFillIcon)
         static let plus = Image(.plusIcon)

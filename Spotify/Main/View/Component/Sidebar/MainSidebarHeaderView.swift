@@ -17,6 +17,7 @@ struct MainSidebarHeadeView: View {
     }
     
     var body: some View {
+        #if os(iOS)
         Button(
             action: action,
             label: {
@@ -30,9 +31,29 @@ struct MainSidebarHeadeView: View {
                     Text(name)
                         .font(.avenirNextBold(size: 24))
                         .padding(.horizontal, 4)
+                        .foregroundStyle(.foreground)
                 }
             }
         )
+        #elseif os(macOS)
+        Button(
+            action: action,
+            label: {
+                HStack {
+                    Image.Dummy.profile
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 30)
+                        .clipShape(Circle())
+                    
+                    Text(name)
+                        .font(.avenirNextBold(size: 12))
+                        .padding(.horizontal, 4)
+                        .foregroundStyle(.foreground)
+                }
+            }
+        )
+        #endif
     }
 }
 

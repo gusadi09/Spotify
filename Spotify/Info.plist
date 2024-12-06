@@ -4,9 +4,9 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
-		<string>AvenirNextLTPro-Demi.otf</string>
-		<string>AvenirNextLTPro-Regular.otf</string>
-		<string>AvenirNextLTPro-Bold.otf</string>
+		<string>AvenirNextLTPro-Demi.ttf</string>
+		<string>AvenirNextLTPro-Regular.ttf</string>
+		<string>AvenirNextLTPro-Bold.ttf</string>
 	</array>
 </dict>
 </plist>

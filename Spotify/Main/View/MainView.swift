@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct MainView: View {
+    @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
     @ObservedObject var viewModel = MainViewModel()
@@ -23,24 +24,7 @@ struct MainView: View {
                     Group {
                         switch viewModel.selectedSection {
                         case .library:
-                            Text("Details")
-                                .toolbar {
-                                    ToolbarItem(placement: .topBarTrailing) {
-                                        Button(
-                                            action: {
-                                                
-                                            },
-                                            label: {
-                                                Image.Icons.plus
-                                                    .renderingMode(.template)
-                                                    .resizable()
-                                                    .scaledToFit()
-                                                    .frame(width: 26)
-                                            }
-                                        )
-                                    }
-                                }
-                                .navigationTitle(Text("Your Library"))
+                            LibraryView()
                         case .search:
                             Text("Search")
                         case .home:
@@ -48,6 +32,7 @@ struct MainView: View {
                         }
                     }
                 }
+                .tint(colorScheme == .dark ? .white : .black)
                 
             } else {
                 NavigationStack {
@@ -69,11 +54,6 @@ struct MainView: View {
                                 
                                 Text("Home")
                             }
-                            .tint(
-                                viewModel.selectedSection == .home
-                                ? .white
-                                : .gray
-                            )
                         }
                         
                         Tab(
@@ -87,11 +67,6 @@ struct MainView: View {
                                 
                                 Text("Search")
                             }
-                            .tint(
-                                viewModel.selectedSection == .search
-                                ? .white
-                                : .gray
-                            )
                         }
                         
                         Tab(
@@ -140,24 +115,29 @@ struct MainView: View {
                                 
                                 Text("Library")
                             }
-                            .tint(
-                                viewModel.selectedSection == .library
-                                ? .white
-                                : .gray
-                            )
                         }
                     }
                 }
+                .tint(colorScheme == .dark ? .white : .black)
             }
 #elseif os(macOS)
             NavigationSplitView {
-                Text("macOS")
+                MainSidebarView(selectedSection: $viewModel.selectedSection, headerName: "John Doe") {}
             } detail: {
-                Text("Detail")
+                Group {
+                    switch viewModel.selectedSection {
+                    case .library:
+                        LibraryView()
+                    case .search:
+                        Text("Search")
+                    case .home:
+                        Text("Home")
+                    }
+                }
             }
+            .tint(colorScheme == .dark ? .white : .black)
 #endif
         }
-        .preferredColorScheme(.dark)
         .tint(.white)
     }
 }
