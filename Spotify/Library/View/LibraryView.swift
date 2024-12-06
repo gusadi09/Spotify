@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ContentView: View {
+struct LibraryView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
 
@@ -30,7 +30,9 @@ struct ContentView: View {
                 }
                 ToolbarItem {
                     Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                        Image.Icons.plus
+                            .renderingMode(.template)
+                            .foregroundStyle(.blue)
                     }
                 }
             }
@@ -56,6 +58,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    LibraryView()
         .modelContainer(for: Item.self, inMemory: true)
 }
