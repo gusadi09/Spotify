@@ -12,6 +12,7 @@ extension Image {
         static let search = Image(.searchIcon)
         static let grid = Image(.gridIcon)
         static let home = Image(.homeIcon)
+        static let homeFill = Image(.homeFillIcon)
         static let plus = Image(.plusIcon)
         static let library = Image(.libraryIcon)
     }

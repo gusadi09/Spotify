@@ -7,4 +7,6 @@
 
 import Foundation
 
-final class LibraryViewModel: ObservableObject {}
+final class LibraryViewModel: ObservableObject {
+    @Published var selectedSection: TabSection = .library
+}
