@@ -28,7 +28,7 @@ struct MainSidebarHeadeView: View {
                         .clipShape(Circle())
                     
                     Text(name)
-                        .font(.avenirNextBold(size: 18))
+                        .font(.avenirNextBold(size: 24))
                         .padding(.horizontal, 4)
                 }
             }

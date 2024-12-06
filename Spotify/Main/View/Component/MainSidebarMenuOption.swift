@@ -38,7 +38,7 @@ struct MainSidebarMenuOption: View {
                         }
                     }
                     .scaledToFit()
-                    .frame(width: 18)
+                    .frame(width: 20)
                     
                     Group {
                         switch section {
@@ -52,8 +52,8 @@ struct MainSidebarMenuOption: View {
                     }
                         .font(
                             selectedSection == section
-                            ? .avenirNextDemi(size: 16)
-                            :.avenirNextRegular(size: 16)
+                            ? .avenirNextDemi(size: 18)
+                            :.avenirNextRegular(size: 18)
                         )
                     
                     Spacer()
