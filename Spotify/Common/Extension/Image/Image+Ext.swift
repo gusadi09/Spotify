@@ -15,4 +15,8 @@ extension Image {
         static let plus = Image(.plusIcon)
         static let library = Image(.libraryIcon)
     }
+    
+    enum Dummy {
+        static let profile = Image(.dummyProfileImg)
+    }
 }
