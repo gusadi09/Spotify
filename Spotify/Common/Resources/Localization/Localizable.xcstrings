@@ -1,7 +1,30 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Item at %@" : {
+    "Details" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details"
+          }
+        }
+      }
+    },
+    "Home" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home"
+          }
+        }
+      }
+    },
+    "iOS" : {
+
+    },
+    "Library" : {
 
     },
     "network_error" : {
@@ -15,7 +38,10 @@
         }
       }
     },
-    "Select an item" : {
+    "Search" : {
+
+    },
+    "Your Library" : {
 
     }
   },
