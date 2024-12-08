@@ -12,6 +12,9 @@ final class LibraryViewModel: ObservableObject {
     @Published var currentContentType: ContentType = .noOption
     @Published var currentListType: ListType = .list
     @Published var contentTypes: [ContentType] = [.playlists]
+    @Published var isShowingMenu = false
+    @Published var isShowingForm = false
+    @Published var playlistName: String = ""
     
     func changeListType() {
         currentListType = currentListType == .list ? .grid : .list
@@ -32,5 +35,18 @@ final class LibraryViewModel: ObservableObject {
         case .list:
             return Image.Icons.grid
         }
+    }
+    
+    func onMenuButtonTap() {
+        isShowingMenu.toggle()
+    }
+    
+    func onCreatePlaylistButtonTap() {
+        isShowingMenu = false
+        isShowingForm = true
+    }
+    
+    func onCloseFormTap() {
+        isShowingForm = false
     }
 }

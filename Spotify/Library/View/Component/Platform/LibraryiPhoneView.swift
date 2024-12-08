@@ -9,6 +9,7 @@ import SwiftUI
 
 #if os(iOS)
 struct LibrayiPhoneView: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var viewModel: LibraryViewModel
     let geo: GeometryProxy
     
@@ -45,7 +46,7 @@ struct LibrayiPhoneView: View {
                     LazyVGrid(
                         columns: Array(
                             repeating: GridItem(.flexible(), spacing: 10),
-                            count: viewModel.calculateColumns(for: geo.size.width/1.3)
+                            count: viewModel.calculateColumns(for: geo.size.width)
                         ),
                         spacing: 10
                     ) {
@@ -61,7 +62,9 @@ struct LibrayiPhoneView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button(
-                    action: {},
+                    action: {
+                        
+                    },
                     label: {
                         HStack {
                             Image.Dummy.profile
@@ -81,7 +84,7 @@ struct LibrayiPhoneView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(
                     action: {
-                        
+                        viewModel.onMenuButtonTap()
                     },
                     label: {
                         Image.Icons.plus
@@ -93,12 +96,51 @@ struct LibrayiPhoneView: View {
                 )
             }
         }
+        .sheet(isPresented: $viewModel.isShowingMenu) {
+            VStack {
+                Button(
+                    action: {
+                        viewModel.onCreatePlaylistButtonTap()
+                    }, label: {
+                        HStack {
+                            Image.Icons.playlistSheet
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 43)
+                                .foregroundStyle(colorScheme == .dark ? .white : .black)
+                            
+                            VStack(alignment: .leading) {
+                                Text(Localizable.playlist)
+                                    .font(.avenirNextDemi(size: 14))
+                                
+                                Text(Localizable.playlistSubtitle)
+                                    .font(.avenirNextDemi(size: 12))
+                                    .foregroundStyle(.gray)
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding()
+                    }
+                )
+            }
+            .presentationDetents([.height(100)])
+        }
+        .sheet(isPresented: $viewModel.isShowingForm) {
+            CreatePlaylistFormView(viewModel: viewModel)
+        }
     }
 }
 
 #Preview {
+    @Previewable @Environment(\.colorScheme) var colorScheme
+    
     GeometryReader { geo in
-        LibrayiPhoneView(viewModel: LibraryViewModel(), geo: geo)
+        NavigationStack {
+            LibrayiPhoneView(viewModel: LibraryViewModel(), geo: geo)
+        }
+        .tint(colorScheme == .dark ? .white : .black)
     }
 }
 

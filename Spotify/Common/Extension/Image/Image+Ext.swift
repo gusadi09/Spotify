@@ -16,6 +16,8 @@ extension Image {
         static let homeFill = Image(.homeFillIcon)
         static let plus = Image(.plusIcon)
         static let library = Image(.libraryIcon)
+        static let playlistSheet = Image(.playlistSheetIcon)
+        static let back = Image(.backIcon)
     }
     
     enum Dummy {

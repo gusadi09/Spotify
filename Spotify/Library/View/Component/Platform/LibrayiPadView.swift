@@ -9,6 +9,7 @@ import SwiftUI
 
 #if os(iOS)
 struct LibrayiPadView: View {
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject var viewModel: LibraryViewModel
     let geo: GeometryProxy
     
@@ -62,7 +63,7 @@ struct LibrayiPadView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(
                     action: {
-                        
+                        viewModel.onMenuButtonTap()
                     },
                     label: {
                         Image.Icons.plus
@@ -72,15 +73,51 @@ struct LibrayiPadView: View {
                             .frame(width: 26)
                     }
                 )
+                .popover(isPresented: $viewModel.isShowingMenu) {
+                    Button(
+                        action: {
+                            viewModel.onCreatePlaylistButtonTap()
+                        }, label: {
+                            HStack {
+                                Image.Icons.playlistSheet
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 43)
+                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                
+                                VStack(alignment: .leading) {
+                                    Text(Localizable.playlist)
+                                        .font(.avenirNextDemi(size: 14))
+                                    
+                                    Text(Localizable.playlistSubtitle)
+                                        .font(.avenirNextDemi(size: 12))
+                                        .foregroundStyle(.gray)
+                                }
+                            }
+                            .padding()
+                        }
+                    )
+                }
             }
         }
         .navigationTitle(Text(Localizable.yourLibrary))
+        .sheet(isPresented: $viewModel.isShowingForm) {
+            CreatePlaylistFormView(viewModel: viewModel)
+        }
     }
 }
 
 #Preview {
+    @Previewable @Environment(\.colorScheme) var colorScheme
+    
     GeometryReader { geo in
-        LibrayiPadView(viewModel: LibraryViewModel(), geo: geo)
+        NavigationSplitView {
+            
+        } detail: {
+            LibrayiPadView(viewModel: LibraryViewModel(), geo: geo)
+        }
+        .tint(colorScheme == .dark ? .white : .black)
     }
 }
 
