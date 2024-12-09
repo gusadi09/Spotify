@@ -43,9 +43,6 @@
         }
       }
     },
-    "My First Playlist" : {
-
-    },
     "network_error" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -68,8 +65,16 @@
         }
       }
     },
-    "Playlist • 10 songs" : {
-
+    "playlist_count_subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Playlist • %lld songs"
+          }
+        }
+      }
     },
     "playlist_subtitle" : {
       "extractionState" : "manual",

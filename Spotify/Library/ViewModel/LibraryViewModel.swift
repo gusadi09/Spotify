@@ -9,12 +9,19 @@ import Foundation
 import SwiftUI
 
 final class LibraryViewModel: ObservableObject {
+    private let localDataSource: PlaylistLocalDataSource
+    
     @Published var currentContentType: ContentType = .noOption
     @Published var currentListType: ListType = .list
     @Published var contentTypes: [ContentType] = [.playlists]
     @Published var isShowingMenu = false
     @Published var isShowingForm = false
     @Published var playlistName: String = ""
+    @Published var playlists: [Playlist] = []
+    
+    init(localDataSource: PlaylistLocalDataSource = PlaylistDefaultLocalDataSource()) {
+        self.localDataSource = localDataSource
+    }
     
     func changeListType() {
         currentListType = currentListType == .list ? .grid : .list
@@ -48,5 +55,30 @@ final class LibraryViewModel: ObservableObject {
     
     func onCloseFormTap() {
         isShowingForm = false
+    }
+    
+    @MainActor
+    func addPlaylist() async {
+        guard !playlistName.isEmpty else { return }
+        let playlist = Playlist.init(id: UUID(), timestamp: Date(), playlistName: playlistName, songs: [])
+        
+        do {
+            try await localDataSource.savePlaylist(playlist)
+            playlistName = ""
+            isShowingForm = false
+            isShowingMenu = false
+            await getPlaylists()
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    @MainActor
+    func getPlaylists() async {
+        do {
+            playlists = try await localDataSource.getPlaylists()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }

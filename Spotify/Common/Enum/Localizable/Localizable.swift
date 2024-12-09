@@ -20,4 +20,7 @@ enum Localizable {
     static let playlistSubtitle = String(localized: "playlist_subtitle")
     static let addPlaylistTitle = String(localized: "add_playlist_title")
     static let confirm = String(localized: "confirm")
+    static func playlistCountSubtitle(_ count: Int) -> String {
+        String(format: String(localized: "playlist_count_subtitle"), count)
+    }
 }

@@ -38,22 +38,24 @@ struct LibrayiPhoneView: View {
                 
                 switch viewModel.currentListType {
                 case .list:
-                    ForEach(0..<100) { _ in
-                        LibraryPlaylistItemView()
+                    ForEach(viewModel.playlists) {
+                        LibraryPlaylistItemView(playlist: $0)
                             .listRowSeparator(.hidden)
                     }
                 case .grid:
                     LazyVGrid(
                         columns: Array(
                             repeating: GridItem(.flexible(), spacing: 10),
-                            count: viewModel.calculateColumns(for: geo.size.width)
+                            count: viewModel.calculateColumns(for: geo.size.width/1.4)
                         ),
                         spacing: 10
                     ) {
-                        ForEach(0..<100) { _ in
-                            LibraryPlaylistGridItemView()
+                        ForEach(viewModel.playlists) {
+                            LibraryPlaylistGridItemView(playlist: $0)
                         }
                     }
+                    .listRowSeparator(.hidden)
+                    .padding(.horizontal)
                 }
             }
             .listStyle(.plain)

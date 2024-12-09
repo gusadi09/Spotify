@@ -64,7 +64,9 @@ struct CreatePlaylistFormView: View {
             }
             
             Button {
-                
+                Task {
+                    await viewModel.addPlaylist()
+                }
             } label: {
                 Text(Localizable.confirm)
                     .font(.avenirNextDemi(size: 20))
@@ -77,6 +79,7 @@ struct CreatePlaylistFormView: View {
                     )
             }
             .buttonStyle(.plain)
+            .disabled(viewModel.playlistName.isEmpty)
             
             
             Spacer()

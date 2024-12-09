@@ -22,6 +22,14 @@ struct LibraryView: View {
             LibraryMacOSView(viewModel: viewModel, geo: geo)
 #endif
         }
+        .onAppear {
+            Task {
+                await viewModel.getPlaylists()
+            }
+        }
+        .refreshable {
+            await viewModel.getPlaylists()
+        }
     }
 }
 

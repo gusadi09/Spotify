@@ -10,7 +10,7 @@ import Foundation
 
 final class SongsDefaultRemoteDataSource: SongsRemoteDataSource {
     
-    let service: NetworkManager
+    private let service: NetworkManager
     
     init(service: NetworkManager = DefaultNetworkManager()) {
         self.service = service

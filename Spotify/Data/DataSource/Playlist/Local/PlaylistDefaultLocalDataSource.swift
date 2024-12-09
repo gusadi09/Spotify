@@ -10,7 +10,7 @@ import Foundation
 import SwiftData
 
 final class PlaylistDefaultLocalDataSource: PlaylistLocalDataSource {
-    let manager: PersistentManager
+    private let manager: PersistentManager
     
     init(manager: PersistentManager = PersistentManager.shared) {
         self.manager = manager
