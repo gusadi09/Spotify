@@ -31,4 +31,6 @@ enum Localizable {
     static func songArtist(_ artist: String) -> String {
         String(format: String(localized: "Song • %@"), artist)
     }
+    static let attention = String(localized: "attention")
+    static let duplicatedSong = String(localized: "duplicated_song_error")
 }

@@ -30,6 +30,12 @@ struct LibraryView: View {
         .refreshable {
             await viewModel.getPlaylists()
         }
+        .alert(Localizable.attention, isPresented: $viewModel.isError) {
+            
+        } message: {
+            Text(viewModel.errorMsg ?? "")
+        }
+
     }
 }
 

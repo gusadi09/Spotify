@@ -20,6 +20,8 @@ final class LibraryDetailViewModel: ObservableObject {
     @Published var searchSong: String = ""
     @Published var debounceSearch: String = ""
     @Published var countedSongs: Int = 0
+    @Published var isError = false
+    @Published var errorMsg: String?
     
     init(
         remote: SongsRemoteDataSource = SongsDefaultRemoteDataSource(),
@@ -29,6 +31,16 @@ final class LibraryDetailViewModel: ObservableObject {
         self.remote = remote
         self.local = local
         self.playlist = playlist
+    }
+    
+    @MainActor
+    func onSelectSong(with song: SongData) {
+        Task {
+            await addToPlaylist(song)
+            await saveRecentSearch(song)
+            
+            showSearch = false
+        }
     }
     
     func onAppear() {
@@ -64,12 +76,14 @@ final class LibraryDetailViewModel: ObservableObject {
             .sink { phase in
                 switch phase {
                 case .finished:
-                    print("completed")
+                    break
                 case .failure(let error):
-                    print(error)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.isError = true
+                        self?.errorMsg = error.localizedDescription
+                    }
                 }
             } receiveValue: { response in
-                print(response)
                 DispatchQueue.main.async { [weak self] in
                     self?.songs = response.results ?? []
                 }
@@ -94,14 +108,16 @@ final class LibraryDetailViewModel: ObservableObject {
             try await local.saveRecentSongSearch(song)
             await getRecentSearch()
         } catch {
-            print(error.localizedDescription)
+            isError = true
+            errorMsg = error.localizedDescription
         }
     }
     
     @MainActor
     func addToPlaylist(_ song: SongData) async {
         if playlist.songs.contains(where: { $0.id == song.trackId }) {
-            print("can't add song to playlist")
+            isError = true
+            errorMsg = Localizable.duplicatedSong
         } else {
             do {
                 let song = Song(
@@ -118,7 +134,8 @@ final class LibraryDetailViewModel: ObservableObject {
                 playlist = try await local.getPlaylist(with: playlist.id)
                 countedSongs = playlist.songs.count
             } catch {
-                print(error.localizedDescription)
+                isError = true
+                errorMsg = error.localizedDescription
             }
         }
     }
@@ -128,7 +145,8 @@ final class LibraryDetailViewModel: ObservableObject {
         do {
             recentSearchs = try await local.getRecentSearchSongs()
         } catch {
-            print(error.localizedDescription)
+            isError = true
+            errorMsg = error.localizedDescription
         }
     }
 }

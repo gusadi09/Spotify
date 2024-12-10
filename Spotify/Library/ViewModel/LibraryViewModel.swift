@@ -19,6 +19,8 @@ final class LibraryViewModel: ObservableObject {
     @Published var playlistName: String = ""
     @Published var playlists: [Playlist] = []
     @Published var selectedPlaylist: Playlist?
+    @Published var isError = false
+    @Published var errorMsg: String?
     
     init(localDataSource: PlaylistLocalDataSource = PlaylistDefaultLocalDataSource()) {
         self.localDataSource = localDataSource
@@ -70,7 +72,8 @@ final class LibraryViewModel: ObservableObject {
             isShowingMenu = false
             await getPlaylists()
         } catch {
-            print(error.localizedDescription)
+            isError = true
+            errorMsg = error.localizedDescription
         }
     }
     
@@ -79,7 +82,8 @@ final class LibraryViewModel: ObservableObject {
         do {
             playlists = try await localDataSource.getPlaylists()
         } catch {
-            print(error.localizedDescription)
+            isError = true
+            errorMsg = error.localizedDescription
         }
     }
 }

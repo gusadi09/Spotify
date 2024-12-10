@@ -12,6 +12,17 @@
         }
       }
     },
+    "attention" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attention"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "extractionState" : "manual"
     },
@@ -22,6 +33,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Confirm"
+          }
+        }
+      }
+    },
+    "duplicated_song_error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This song already on your Playlist."
           }
         }
       }

@@ -38,6 +38,11 @@ struct LibraryDetailView: View {
                 endPoint: .center
             )
         )
+        .alert(Localizable.attention, isPresented: $viewModel.isError) {
+            
+        } message: {
+            Text(viewModel.errorMsg ?? "")
+        }
         .navigationBarBackButtonHidden(true)
         .toolbar {
             #if os(iOS)
@@ -112,12 +117,7 @@ struct LibraryDetailView: View {
                     songs: $viewModel.songs,
                     recentSearchs: $viewModel.recentSearchs,
                     addSongAction: { song in
-                        Task {
-                            await viewModel.addToPlaylist(song)
-                            await viewModel.saveRecentSearch(song)
-                            
-                            viewModel.showSearch = false
-                        }
+                        viewModel.onSelectSong(with: song)
                     },
                     cancelAction: {
                         viewModel.toggleSearchSheet()
