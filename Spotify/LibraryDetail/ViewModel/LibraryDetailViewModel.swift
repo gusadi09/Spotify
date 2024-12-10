@@ -19,6 +19,7 @@ final class LibraryDetailViewModel: ObservableObject {
     @Published var showSearch = false
     @Published var searchSong: String = ""
     @Published var debounceSearch: String = ""
+    @Published var countedSongs: Int = 0
     
     init(
         remote: SongsRemoteDataSource = SongsDefaultRemoteDataSource(),
@@ -28,6 +29,23 @@ final class LibraryDetailViewModel: ObservableObject {
         self.remote = remote
         self.local = local
         self.playlist = playlist
+    }
+    
+    func onAppear() {
+        countedSongs = playlist.songs.count
+        getSongs()
+        setupDebounce()
+        Task {
+            await getRecentSearch()
+        }
+    }
+    
+    func toggleSearchSheet() {
+        showSearch.toggle()
+    }
+    
+    func resetSearch() {
+        searchSong = ""
     }
     
     func setupDebounce() {
@@ -98,6 +116,7 @@ final class LibraryDetailViewModel: ObservableObject {
                 
                 try await local.addSongToPlaylist(playlist, song: song)
                 playlist = try await local.getPlaylist(with: playlist.id)
+                countedSongs = playlist.songs.count
             } catch {
                 print(error.localizedDescription)
             }

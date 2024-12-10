@@ -27,4 +27,8 @@ enum Localizable {
         String(format: String(localized: "songs_count"), count)
     }
     static let cancel = String(localized: "Cancel")
+    static let recentSearches = String(localized: "Recent searches")
+    static func songArtist(_ artist: String) -> String {
+        String(format: String(localized: "Song • %@"), artist)
+    }
 }

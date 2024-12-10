@@ -91,7 +91,14 @@
       }
     },
     "Recent searches" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent searches"
+          }
+        }
+      }
     },
     "Search" : {
       "localizations" : {
@@ -104,7 +111,14 @@
       }
     },
     "Song • %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Song • %@"
+          }
+        }
+      }
     },
     "songs_count" : {
       "localizations" : {

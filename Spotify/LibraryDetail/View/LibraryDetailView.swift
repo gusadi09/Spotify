@@ -14,589 +14,126 @@ struct LibraryDetailView: View {
     @StateObject var viewModel: LibraryDetailViewModel
     
     var body: some View {
-        Group {
-#if os(iOS)
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                List {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text(viewModel.playlist.playlistName)
-                                .font(.avenirNextDemi(size: 19))
-                            
-                            Text(Localizable.songsCount(viewModel.playlist.songs.count))
-                                .font(.avenirNextDemi(size: 12))
-                                .foregroundStyle(.gray)
-                        }
-                        
-                        Spacer()
-                        
-                    }
-                    .padding(.vertical)
+        List {
+            LibraryDetailHeaderView(songsCount: $viewModel.countedSongs, playlistName: $viewModel.playlist.playlistName)
+                .padding(.vertical)
+                .listRowSeparator(.hidden)
+                .listRowBackground(Color.clear)
+            
+            ForEach(viewModel.playlist.songs, id: \.id) { song in
+                PlaylistSongItemView(song: song)
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
-                    
-                    ForEach(viewModel.playlist.songs, id: \.id) { song in
-                        HStack {
-                            ImageLoader(url: song.artworkUrl100, height: 55, width: 55)
-                                .clipShape(Rectangle())
-                            
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(song.trackName)
-                                    .font(.avenirNextDemi(size: 14))
-                                    .lineLimit(1)
-                                
-                                Text(song.artistName)
-                                    .font(.avenirNextRegular(size: 11))
-                                    .foregroundStyle(.gray)
-                                    .lineLimit(1)
-                            }
-                            
-                            Spacer()
-                            
-                            Button(action:{
-                                
-                            }, label: {
-                                Image.Icons.moreOption
-                                    .renderingMode(.template)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 18)
-                            })
-                            .buttonStyle(.plain)
-                        }
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color.clear)
-                    }
+            }
+        }
+        .listStyle(.plain)
+        .background(
+            LinearGradient(
+                colors: [
+                    .deepPurple,
+                    colorScheme == .dark ? .black : .white,
+                    colorScheme == .dark ? .black : .white
+                ],
+                startPoint: .top,
+                endPoint: .center
+            )
+        )
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            #if os(iOS)
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image.Icons.back
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20)
+                        .foregroundStyle(.foreground)
                 }
-                .listStyle(.plain)
-                .background(
-                    LinearGradient(
-                        colors: [
-                            .deepPurple,
-                            colorScheme == .dark ? .black : .white,
-                            colorScheme == .dark ? .black : .white
-                        ],
-                        startPoint: .top,
-                        endPoint: .center
-                    )
-                )
-                .navigationBarBackButtonHidden(true)
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image.Icons.back
-                                .renderingMode(.template)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20)
-                                .foregroundStyle(.foreground)
-                        }
-                    }
-                    
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(
-                            action: {
-                                viewModel.showSearch = true
-                            },
-                            label: {
-                                Image.Icons.plus
-                                    .renderingMode(.template)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 20)
-                                    .foregroundStyle(.foreground)
-                            }
-                        )
-                    }
-                }
-                .toolbarBackground(.deepPurple, for: .navigationBar)
-                .sheet(
-                    isPresented: $viewModel.showSearch,
-                    onDismiss: {viewModel.searchSong = ""},
-                    content: {
-                        VStack(alignment: .leading) {
-                            HStack {
-                                HStack(alignment: .center, spacing: 10) {
-                                    Image(systemName: "magnifyingglass")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 12)
-                                        .foregroundStyle(.foreground)
-                                    
-                                    TextField(Localizable.search, text: $viewModel.searchSong)
-                                        .font(.avenirNextRegular(size: 15))
-                                        .foregroundStyle(.foreground)
-                                        .textFieldStyle(.plain)
-                                        .autocorrectionDisabled(true)
-                                }
-                                .padding(12)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .foregroundStyle(colorScheme == .dark ? Color.lightGray : .gray.opacity(0.5))
-                                )
-                                
-                                Button(
-                                    action: {
-                                        viewModel.showSearch = false
-                                    }, label: {
-                                        Text(Localizable.cancel)
-                                            .font(.avenirNextRegular(size: 15))
-                                    }
-                                )
-                                .buttonStyle(.plain)
-                                
-                                Spacer()
-                            }
-                            
-                            if viewModel.searchSong.isEmpty {
-                                Text("Recent searches")
-                                    .font(.avenirNextDemi(size: 17))
-                                    .padding(.top)
-                                
-                                List {
-                                    ForEach(viewModel.recentSearchs, id: \.id) { song in
-                                        HStack(alignment: .center, spacing: 15) {
-                                            ImageLoader(url: song.artworkUrl100, height: 65, width: 65)
-                                                .clipShape(Circle())
-                                            
-                                            VStack(alignment: .leading, spacing: 10) {
-                                                Text(song.trackName)
-                                                    .font(.avenirNextDemi(size: 15))
-                                                
-                                                Text("Song • \(song.artistName)")
-                                                    .font(.avenirNextRegular(size: 13))
-                                                    .foregroundStyle(.gray)
-                                            }
-                                            
-                                        }
-                                        .listRowSeparator(.hidden)
-                                    }
-                                }
-                                .listStyle(.plain)
-                            } else {
-                                List {
-                                    ForEach(viewModel.songs, id: \.trackId) { song in
-                                        HStack(alignment: .center, spacing: 15) {
-                                            ImageLoader(url: song.artworkUrl100, height: 65, width: 65)
-                                                .clipShape(Circle())
-                                            
-                                            VStack(alignment: .leading, spacing: 10) {
-                                                Text(song.trackName ?? "-")
-                                                    .font(.avenirNextDemi(size: 15))
-                                                
-                                                Text("Song • \(song.artistName ?? "-")")
-                                                    .font(.avenirNextRegular(size: 13))
-                                                    .foregroundStyle(.gray)
-                                            }
-                                            
-                                        }
-                                        .contentShape(Rectangle())
-                                        .listRowSeparator(.hidden)
-                                        .onTapGesture {
-                                            Task {
-                                                await viewModel.addToPlaylist(song)
-                                                await viewModel.saveRecentSearch(song)
-                                                
-                                                viewModel.showSearch = false
-                                            }
-                                        }
-                                    }
-                                }
-                                .listStyle(.plain)
-                            }
-                        }
-                        .padding()
-                    }
-                )
-            } else {
-                List {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text(viewModel.playlist.playlistName)
-                                .font(.avenirNextDemi(size: 19))
-                            
-                            Text(Localizable.songsCount(viewModel.playlist.songs.count))
-                                .font(.avenirNextDemi(size: 12))
-                                .foregroundStyle(.gray)
-                        }
-                        
-                        Spacer()
-                        
-                    }
-                    .padding(.vertical)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
-                    
-                    ForEach(viewModel.playlist.songs, id: \.id) { song in
-                        HStack {
-                            ImageLoader(url: song.artworkUrl100, height: 55, width: 55)
-                                .clipShape(Rectangle())
-                            
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text(song.trackName)
-                                    .font(.avenirNextDemi(size: 14))
-                                    .lineLimit(1)
-                                
-                                Text(song.artistName)
-                                    .font(.avenirNextRegular(size: 11))
-                                    .foregroundStyle(.gray)
-                                    .lineLimit(1)
-                            }
-                            
-                            Spacer()
-                            
-                            Button(action:{
-                                
-                            }, label: {
-                                Image.Icons.moreOption
-                                    .renderingMode(.template)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 18)
-                            })
-                            .buttonStyle(.plain)
-                        }
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color.clear)
-                    }
-                }
-                .listStyle(.plain)
-                .background(
-                    LinearGradient(
-                        colors: [
-                            .deepPurple,
-                            colorScheme == .dark ? .black : .white,
-                            colorScheme == .dark ? .black : .white
-                        ],
-                        startPoint: .top,
-                        endPoint: .center
-                    )
-                )
-                .navigationBarBackButtonHidden(true)
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image.Icons.back
-                                .renderingMode(.template)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20)
-                                .foregroundStyle(.foreground)
-                        }
-                    }
-                    
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(
-                            action: {
-                                viewModel.showSearch = true
-                            },
-                            label: {
-                                Image.Icons.plus
-                                    .renderingMode(.template)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 20)
-                                    .foregroundStyle(.foreground)
-                            }
-                        )
-                    }
-                }
-                .toolbarBackground(.deepPurple, for: .navigationBar)
-                .sheet(
-                    isPresented: $viewModel.showSearch,
-                    onDismiss: {viewModel.searchSong = ""},
-                    content: {
-                        VStack(alignment: .leading) {
-                            HStack {
-                                HStack(alignment: .center, spacing: 10) {
-                                    Image(systemName: "magnifyingglass")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 12)
-                                        .foregroundStyle(.foreground)
-                                    
-                                    TextField(Localizable.search, text: $viewModel.searchSong)
-                                        .font(.avenirNextRegular(size: 15))
-                                        .foregroundStyle(.foreground)
-                                        .textFieldStyle(.plain)
-                                        .autocorrectionDisabled(true)
-                                }
-                                .padding(12)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .foregroundStyle(colorScheme == .dark ? Color.lightGray : .gray.opacity(0.5))
-                                )
-                                
-                                Button(
-                                    action: {
-                                        viewModel.showSearch = false
-                                    }, label: {
-                                        Text(Localizable.cancel)
-                                            .font(.avenirNextRegular(size: 15))
-                                    }
-                                )
-                                .buttonStyle(.plain)
-                                
-                                Spacer()
-                            }
-                            
-                            if viewModel.searchSong.isEmpty {
-                                Text("Recent searches")
-                                    .font(.avenirNextDemi(size: 17))
-                                    .padding(.top)
-                                
-                                List {
-                                    ForEach(viewModel.recentSearchs, id: \.id) { song in
-                                        HStack(alignment: .center, spacing: 15) {
-                                            ImageLoader(url: song.artworkUrl100, height: 65, width: 65)
-                                                .clipShape(Circle())
-                                            
-                                            VStack(alignment: .leading, spacing: 10) {
-                                                Text(song.trackName)
-                                                    .font(.avenirNextDemi(size: 15))
-                                                
-                                                Text("Song • \(song.artistName)")
-                                                    .font(.avenirNextRegular(size: 13))
-                                                    .foregroundStyle(.gray)
-                                            }
-                                            
-                                        }
-                                        .listRowSeparator(.hidden)
-                                    }
-                                }
-                                .listStyle(.plain)
-                            } else {
-                                List {
-                                    ForEach(viewModel.songs, id: \.trackId) { song in
-                                        HStack(alignment: .center, spacing: 15) {
-                                            ImageLoader(url: song.artworkUrl100, height: 65, width: 65)
-                                                .clipShape(Circle())
-                                            
-                                            VStack(alignment: .leading, spacing: 10) {
-                                                Text(song.trackName ?? "-")
-                                                    .font(.avenirNextDemi(size: 15))
-                                                
-                                                Text("Song • \(song.artistName ?? "-")")
-                                                    .font(.avenirNextRegular(size: 13))
-                                                    .foregroundStyle(.gray)
-                                            }
-                                            
-                                        }
-                                        .contentShape(Rectangle())
-                                        .listRowSeparator(.hidden)
-                                        .onTapGesture {
-                                            Task {
-                                                await viewModel.addToPlaylist(song)
-                                                await viewModel.saveRecentSearch(song)
-                                                
-                                                viewModel.showSearch = false
-                                            }
-                                        }
-                                    }
-                                }
-                                .listStyle(.plain)
-                            }
-                        }
-                        .padding()
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(
+                    action: {
+                        viewModel.toggleSearchSheet()
+                    },
+                    label: {
+                        Image.Icons.plus
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20)
+                            .foregroundStyle(.foreground)
                     }
                 )
             }
 #elseif os(macOS)
-            List {
-                HStack {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text(viewModel.playlist.playlistName)
-                            .font(.avenirNextDemi(size: 19))
-                        
-                        Text(Localizable.songsCount(viewModel.playlist.songs.count))
-                            .font(.avenirNextDemi(size: 12))
-                            .foregroundStyle(.gray)
-                    }
-                    
-                    Spacer()
-                    
-                }
-                .padding(.vertical)
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
-                
-                ForEach(viewModel.playlist.songs, id: \.id) { song in
-                    HStack {
-                        ImageLoader(url: song.artworkUrl100, height: 55, width: 55)
-                            .clipShape(Rectangle())
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(song.trackName)
-                                .font(.avenirNextDemi(size: 14))
-                                .lineLimit(1)
-                            
-                            Text(song.artistName)
-                                .font(.avenirNextRegular(size: 11))
-                                .foregroundStyle(.gray)
-                                .lineLimit(1)
-                        }
-                        
-                        Spacer()
-                        
-                        Button(action:{
-                            
-                        }, label: {
-                            Image.Icons.moreOption
-                                .renderingMode(.template)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 18)
-                        })
-                        .buttonStyle(.plain)
-                    }
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
+            ToolbarItem(placement: .navigation) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image.Icons.back
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20)
+                        .foregroundStyle(.foreground)
                 }
             }
-            .listStyle(.plain)
-            .background(
-                LinearGradient(
-                    colors: [
-                        .deepPurple,
-                        colorScheme == .dark ? .black : .white,
-                        colorScheme == .dark ? .black : .white
-                    ],
-                    startPoint: .top,
-                    endPoint: .center
+            
+            ToolbarItem(placement: .confirmationAction) {
+                Button(
+                    action: {
+                        viewModel.toggleSearchSheet()
+                    },
+                    label: {
+                        Image.Icons.plus
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20)
+                            .foregroundStyle(.foreground)
+                    }
                 )
-            )
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    Button(
-                        action: {
-                            viewModel.showSearch = true
-                        },
-                        label: {
-                            Image.Icons.plus
-                                .renderingMode(.template)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 26)
-                                .foregroundStyle(.foreground)
-                        }
-                    )
-                }
             }
-            .sheet(
-                isPresented: $viewModel.showSearch,
-                onDismiss: {viewModel.searchSong = ""},
-                content: {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            HStack(alignment: .center, spacing: 10) {
-                                Image(systemName: "magnifyingglass")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 12)
-                                    .foregroundStyle(.foreground)
-                                
-                                TextField(Localizable.search, text: $viewModel.searchSong)
-                                    .font(.avenirNextRegular(size: 15))
-                                    .foregroundStyle(.foreground)
-                                    .textFieldStyle(.plain)
-                                    .autocorrectionDisabled(true)
-                            }
-                            .padding(12)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .foregroundStyle(colorScheme == .dark ? Color.lightGray : .gray.opacity(0.5))
-                            )
-                            
-                            Button(
-                                action: {
-                                    viewModel.showSearch = false
-                                }, label: {
-                                    Text(Localizable.cancel)
-                                        .font(.avenirNextRegular(size: 15))
-                                }
-                            )
-                            .buttonStyle(.plain)
-                            
-                            Spacer()
-                        }
-                        
-                        if viewModel.searchSong.isEmpty {
-                            Text("Recent searches")
-                                .font(.avenirNextDemi(size: 17))
-                                .padding(.top)
-                            
-                            List {
-                                ForEach(viewModel.recentSearchs, id: \.id) { song in
-                                    HStack(alignment: .center, spacing: 15) {
-                                        ImageLoader(url: song.artworkUrl100, height: 65, width: 65)
-                                            .clipShape(Circle())
-                                        
-                                        VStack(alignment: .leading, spacing: 10) {
-                                            Text(song.trackName)
-                                                .font(.avenirNextDemi(size: 15))
-                                            
-                                            Text("Song • \(song.artistName)")
-                                                .font(.avenirNextRegular(size: 13))
-                                                .foregroundStyle(.gray)
-                                        }
-                                        
-                                    }
-                                    .listRowSeparator(.hidden)
-                                }
-                            }
-                            .frame(minWidth: 300, minHeight: 500)
-                        } else {
-                            List {
-                                ForEach(viewModel.songs, id: \.trackId) { song in
-                                    HStack(alignment: .center, spacing: 15) {
-                                        ImageLoader(url: song.artworkUrl100, height: 65, width: 65)
-                                            .clipShape(Circle())
-                                        
-                                        VStack(alignment: .leading, spacing: 10) {
-                                            Text(song.trackName ?? "-")
-                                                .font(.avenirNextDemi(size: 15))
-                                            
-                                            Text("Song • \(song.artistName ?? "-")")
-                                                .font(.avenirNextRegular(size: 13))
-                                                .foregroundStyle(.gray)
-                                        }
-                                        
-                                    }
-                                    .contentShape(Rectangle())
-                                    .listRowSeparator(.hidden)
-                                    .onTapGesture {
-                                        Task {
-                                            await viewModel.addToPlaylist(song)
-                                            await viewModel.saveRecentSearch(song)
-                                            viewModel.showSearch = false
-                                        }
-                                    }
-                                }
-                            }
-                            .frame(minWidth: 300, minHeight: 500)
-                        }
-                    }
-                    .padding()
-                }
-            )
 #endif
         }
-        .onAppear {
-            viewModel.getSongs()
-            viewModel.setupDebounce()
-            Task {
-                await viewModel.getRecentSearch()
+#if os(iOS)
+        .toolbarBackground(.deepPurple, for: .navigationBar)
+#endif
+        .sheet(
+            isPresented: $viewModel.showSearch,
+            onDismiss: {viewModel.resetSearch()},
+            content: {
+                FindSongSheetView(
+                    search: $viewModel.searchSong,
+                    songs: $viewModel.songs,
+                    recentSearchs: $viewModel.recentSearchs,
+                    addSongAction: { song in
+                        Task {
+                            await viewModel.addToPlaylist(song)
+                            await viewModel.saveRecentSearch(song)
+                            
+                            viewModel.showSearch = false
+                        }
+                    },
+                    cancelAction: {
+                        viewModel.toggleSearchSheet()
+                    }
+                )
+                .padding()
             }
+        )
+        .onAppear {
+            viewModel.onAppear()
         }
     }
 }
 
 #Preview {
-    #if os(iOS)
+#if os(iOS)
     if UIDevice.current.userInterfaceIdiom == .pad {
         NavigationSplitView {
             
