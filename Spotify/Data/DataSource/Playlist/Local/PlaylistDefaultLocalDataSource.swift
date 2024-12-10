@@ -66,4 +66,27 @@ final class PlaylistDefaultLocalDataSource: PlaylistLocalDataSource {
         context.delete(song)
         try context.save()
     }
+    
+    @MainActor
+    func saveRecentSongSearch(_ song: RecentSearchSong) async throws {
+        let context = manager.modelContainer.mainContext
+        
+        context.insert(song)
+        try context.save()
+    }
+    
+    @MainActor
+    func getPlaylist(with id: UUID) async throws -> Playlist {
+        let predicate = #Predicate<Playlist> { $0.id == id }
+        let playlists = try manager.modelContainer.mainContext.fetch(FetchDescriptor<Playlist>(predicate: predicate))
+        
+        return playlists.first ?? Playlist(id: UUID(), timestamp: Date(), playlistName: "", songs: [])
+    }
+    
+    @MainActor
+    func getRecentSearchSongs() async throws -> [RecentSearchSong] {
+        let songs = try manager.modelContainer.mainContext.fetch(FetchDescriptor<RecentSearchSong>())
+        
+        return songs
+    }
 }

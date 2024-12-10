@@ -12,6 +12,9 @@
         }
       }
     },
+    "Cancel" : {
+      "extractionState" : "manual"
+    },
     "confirm" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -87,12 +90,28 @@
         }
       }
     },
+    "Recent searches" : {
+
+    },
     "Search" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Search"
+          }
+        }
+      }
+    },
+    "Song • %@" : {
+
+    },
+    "songs_count" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld songs"
           }
         }
       }

@@ -10,7 +10,7 @@ import SwiftUI
 #if os(iOS)
 struct LibrayiPhoneView: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var viewModel: LibraryViewModel
+    @StateObject var viewModel: LibraryViewModel
     let geo: GeometryProxy
     
     var body: some View {
@@ -38,9 +38,14 @@ struct LibrayiPhoneView: View {
                 
                 switch viewModel.currentListType {
                 case .list:
-                    ForEach(viewModel.playlists) {
-                        LibraryPlaylistItemView(playlist: $0)
-                            .listRowSeparator(.hidden)
+                    ForEach(viewModel.playlists) { item in
+                        Button(action: {
+                            viewModel.selectedPlaylist = item
+                        }, label:{
+                            LibraryPlaylistItemView(playlist: item)
+                                .contentShape(Rectangle())
+                        })
+                        .listRowSeparator(.hidden)
                     }
                 case .grid:
                     LazyVGrid(
@@ -50,8 +55,13 @@ struct LibrayiPhoneView: View {
                         ),
                         spacing: 10
                     ) {
-                        ForEach(viewModel.playlists) {
-                            LibraryPlaylistGridItemView(playlist: $0)
+                        ForEach(viewModel.playlists) { item in
+                            Button(action: {
+                                viewModel.selectedPlaylist = item
+                            }, label:{
+                                LibraryPlaylistGridItemView(playlist: item)
+                                    .contentShape(Rectangle())
+                            })
                         }
                     }
                     .listRowSeparator(.hidden)
@@ -131,6 +141,9 @@ struct LibrayiPhoneView: View {
         }
         .sheet(isPresented: $viewModel.isShowingForm) {
             CreatePlaylistFormView(viewModel: viewModel)
+        }
+        .navigationDestination(item: $viewModel.selectedPlaylist) {
+            LibraryDetailView(viewModel: LibraryDetailViewModel(playlist: $0))
         }
     }
 }

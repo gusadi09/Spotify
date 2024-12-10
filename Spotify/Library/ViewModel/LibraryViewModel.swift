@@ -18,6 +18,7 @@ final class LibraryViewModel: ObservableObject {
     @Published var isShowingForm = false
     @Published var playlistName: String = ""
     @Published var playlists: [Playlist] = []
+    @Published var selectedPlaylist: Playlist?
     
     init(localDataSource: PlaylistLocalDataSource = PlaylistDefaultLocalDataSource()) {
         self.localDataSource = localDataSource

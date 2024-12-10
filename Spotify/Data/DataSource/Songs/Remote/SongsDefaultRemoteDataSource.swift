@@ -18,7 +18,7 @@ final class SongsDefaultRemoteDataSource: SongsRemoteDataSource {
     
     func fetchSongs(with query: String) -> AnyPublisher<SongResponse, NetworkError> {
         let body = [
-            "search" : query,
+            "term" : query,
             "media" : "music"
         ]
         
@@ -26,8 +26,9 @@ final class SongsDefaultRemoteDataSource: SongsRemoteDataSource {
             path: "/search",
             header: nil,
             method: .get,
-            body: body.toJSONData(),
-            responseType: SongResponse.self
+            body: body,
+            responseType: SongResponse.self,
+            bodyType: .queryParams
         )
     }
 }

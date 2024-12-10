@@ -9,5 +9,5 @@ import Combine
 import Foundation
 
 protocol NetworkManager {
-    func request<T: Codable>(path: String, header: [String: String]?, method: NetworkMethod, body: Encodable?, responseType: T.Type) -> AnyPublisher<T, NetworkError>
+    func request<T: Codable>(path: String, header: [String: String]?, method: NetworkMethod, body: [String:String]?, responseType: T.Type, bodyType: NetworkBodyType) -> AnyPublisher<T, NetworkError>
 }

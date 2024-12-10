@@ -14,7 +14,8 @@ class PersistentManager {
     var modelContainer: ModelContainer = {
         let schema = Schema([
             Playlist.self,
-            Song.self
+            Song.self,
+            RecentSearchSong.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         

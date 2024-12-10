@@ -14,4 +14,7 @@ protocol PlaylistLocalDataSource {
     func getsongFromPlaylist(_ playlist: Playlist) async throws -> [Song]
     func addSongToPlaylist(_ playlist: Playlist, song: Song) async throws
     func deleteSongFromPlaylist(song: Song) async throws
+    func saveRecentSongSearch(_ song: RecentSearchSong) async throws
+    func getPlaylist(with id: UUID) async throws -> Playlist
+    func getRecentSearchSongs() async throws -> [RecentSearchSong]
 }

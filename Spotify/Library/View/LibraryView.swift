@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LibraryView: View {
     @Environment(\.colorScheme) var colorScheme
-    @ObservedObject var viewModel = LibraryViewModel()
+    @StateObject var viewModel = LibraryViewModel()
     var body: some View {
         GeometryReader { geo in
 #if os(iOS)

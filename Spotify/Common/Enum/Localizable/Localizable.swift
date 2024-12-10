@@ -23,4 +23,8 @@ enum Localizable {
     static func playlistCountSubtitle(_ count: Int) -> String {
         String(format: String(localized: "playlist_count_subtitle"), count)
     }
+    static func songsCount(_ count: Int) -> String {
+        String(format: String(localized: "songs_count"), count)
+    }
+    static let cancel = String(localized: "Cancel")
 }

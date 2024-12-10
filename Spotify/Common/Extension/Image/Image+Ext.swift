@@ -18,6 +18,7 @@ extension Image {
         static let library = Image(.libraryIcon)
         static let playlistSheet = Image(.playlistSheetIcon)
         static let back = Image(.backIcon)
+        static let moreOption = Image(.moreOptionIcon)
     }
     
     enum Dummy {

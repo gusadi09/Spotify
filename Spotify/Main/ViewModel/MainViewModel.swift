@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 final class MainViewModel: ObservableObject {
     @Published var selectedSection: TabSection = .library
